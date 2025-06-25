@@ -1,41 +1,182 @@
 {% extends "base.html" %}
-
 {% block content %}
+{% if user.is_authenticated %}
+<style>
+  .my-thead th {
+    background-color: #8FBC8F !important;
+    color: white !important;
+  }
 
-<div class="col-md-6 offset-md-3">
-    
+  .page-link {
+    color: #3c6e47;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+  }
 
-    {% if user.is_authenticated %}
+  .page-link:hover {
+    background-color: #8FBC8F !important;
+    color: white !important;
+    border-color: #8FBC8F !important;
+  }
 
-    <h1>Hello World</h1>
+  .page-item.active .page-link {
+    background-color: #198754;
+    border-color: #198754;
+    color: white;
+  }
 
-    {% else %}
-    <h1>Login!</h1> 
-    <br/>
-    <form method="POST" action="{% url 'home' %}">
-        {% csrf_token %}
-        <form>
-            <div class="mb-3">
-                
-                <input type="text" class="form-control" name="username", placeholder="Username" required>
-                
-            </div><br/>
-            <div class="mb-3">
-                
-                <input type="password" class="form-control" name="password", placeholder="Password" required>
-            </div>
-            <br/>
+  .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #fff;
+    border-color: #dee2e6;
+  }
 
-            <button type="submit" class="btn btn-secondary">Login</button>
-        </form>
-    </form>
+  .table-pagination-wrapper {
+    min-height: 320px; /* cukup untuk 5 baris dan pagination */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+</style>
 
+<div class="container mt-3">
+
+  <div class="text-center">
+    <h1 class="h4 text-center mb-4 text-uppercase fw-bold" style="letter-spacing: 2px; border-bottom: 2px solid #0d6efd; display: inline-block; padding-bottom: 5px;">
+      Client Record
+    </h1>
+  </div>
+
+  <!-- Tabel & Pagination -->
+  <div class="table-pagination-wrapper">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover table-bordered">
+        <thead class="my-thead">
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Addres</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zipcode</th>
+            <th>Created at</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+            {% if page_obj %}
+                {% for record in page_obj %}
+                <tr>
+                    <td>{{ record.first_name }} {{ record.last_name }}</td>
+                    <td>{{ record.email }}</td>
+                    <td>{{ record.phone }}</td>
+                    <td>{{ record.address }}</td>
+                    <td>{{ record.city }}</td>
+                    <td>{{ record.state }}</td>
+                    <td>{{ record.zipcode }}</td>
+                    <td>{{ record.created_at }}</td>
+                    <td>
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'record' record.id %}" class="btn text-secondary px-0 me-3">
+                        <i class="fa-solid fa-eye"></i>
+                        </a>
+                        <button type="button" class="btn text-secondary px-0" data-bs-toggle="modal" data-bs-target="#deleteModal{{ record.id }}">
+                        <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                        </button>
+                    </div>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                {% for i in "12345"|make_list %}
+                {% if forloop.counter > page_obj|length %}
+                    <tr>
+                    <td colspan="9" style="height: 48px;">&nbsp;</td>
+                    </tr>
+                {% endif %}
+                {% endfor %}
+
+            {% endif %}
+            </tbody>
+
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">&laquo;</span>
+            </li>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">&raquo;</span>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end mt-3 mb-4">
+    <a href="{% url 'add_record' %}" class="btn btn-outline-success">
+      <i class="fa-solid fa-plus"></i> Add New Record
+    </a>
+  </div>
+
+  <!-- Modal -->
+  {% for record in page_obj %}
+    <div class="modal fade" id="deleteModal{{ record.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ record.id }}" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel{{ record.id }}">Confirm Delete</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete this record <strong>{{ record }}</strong>?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <a href="{% url 'delete_record' record.id %}" class="btn btn-danger">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 </div>
 
+{% else %}
+  <script>
+    window.location.href = "{% url 'login' %}";
+  </script>
 {% endif %}
-
 
 {% endblock content %}
 
-
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

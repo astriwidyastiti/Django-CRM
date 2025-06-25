@@ -1,0 +1,23 @@
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+.h-custom {
+  height: calc(100% - 73px);
+}
+
+@media (max-width: 450px) {
+  .h-custom {
+    height: 100%;
+  }
+}
+
+/* Tambahan: Border biru saat input fokus */
+.form-outline .form-control:focus {
+  border-color: #3b71ca;
+  box-shadow: 0 0 0 0.1rem rgba(59, 113, 202, 0.25);
+}
