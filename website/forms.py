@@ -24,7 +24,7 @@ class SignUpForm(UserCreationForm):
         self.fields['username'].required = True
         self.fields['username'].widget.attrs.update({
                      'class': 'form-control',
-                    'placeholder': 'Username',
+                    'placeholder': 'Username *',
                     'required': 'required',
         })
         self.fields['username'].label=''
@@ -34,7 +34,7 @@ class SignUpForm(UserCreationForm):
         self.fields['password1'].required = True
         self.fields['password1'].widget.attrs.update({
                     'class': 'form-control',
-                    'placeholder': 'Password',
+                    'placeholder': 'Password *',
                     'required': 'required',
         })
         self.fields['password1'].label=''
@@ -48,7 +48,7 @@ class SignUpForm(UserCreationForm):
                     'placeholder': 'Confirm Password',
                     'required': 'required',
         })
-        self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password *'
         self.fields['password2'].label=''
         self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification. </small></span>'
         
