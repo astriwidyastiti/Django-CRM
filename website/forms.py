@@ -8,11 +8,11 @@ class SignUpForm(UserCreationForm):
         label="",
          required=True,
          widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder':
-        'Email Adress', 'required': 'required'}),)
+        'Email Adress *', 'required': 'required'}),)
     first_name = forms.CharField(label="",max_length=100, required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':
-        'First Name', 'required': 'required'}))
+        'First Name *', 'required': 'required'}))
     last_name = forms.CharField(label="",max_length=100, required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':
-        'Last Name', 'required': 'required'}))
+        'Last Name *', 'required': 'required'}))
     
     class Meta:
         model = User
