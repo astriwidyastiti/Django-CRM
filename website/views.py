@@ -21,7 +21,7 @@ def home(request):
 
 def login_user(request):
     if request.user.is_authenticated:
-        return redirect('login')
+        return redirect('home')
 
     if request.method == "POST":
         username = request.POST.get('username')
