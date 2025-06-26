@@ -27,12 +27,13 @@
       {% if messages %}
         <div class="container mt-2" id="message-container">
           {% if messages %}
-        <div>
-          {% for message in messages %}
-            <p>Message: {{ message }}</p>
-            <p>Tags: {{ message.tags }}</p>
-          {% endfor %}
-        </div>
+      <div>
+        {% for message in messages %}
+          <p>Message: {{ message }}</p>
+          <p>Tags: {{ message.tags }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
         </div>
       {% endif %}
     
