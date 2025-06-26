@@ -11,6 +11,7 @@
   {% csrf_token %}
   {{ form.as_p }}
 
+  <p><small><span style="color: red">*</span> Fields marked with * are required.</small></p>
 
   <button type="button" class="btn btn-success" id="openModalBtn" disabled>
     Register
