@@ -7,7 +7,7 @@ class SignUpForm(UserCreationForm):
     email =forms.EmailField(
         label="",
          required=True,
-        widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':
+         widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder':
         'Email Adress', 'required': 'required'}),)
     first_name = forms.CharField(label="",max_length=100, required=True, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':
         'First Name', 'required': 'required'}))
