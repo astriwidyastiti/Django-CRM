@@ -9,7 +9,41 @@
 
 <form method="POST" action="" id="register-form">
   {% csrf_token %}
-  {{ form.as_p }}
+  <div class="container mt-4">
+    <label>Username</label>
+    {{ form.username }}
+    {{ form.username.errors }}
+  </div>
+
+  <div class="container mt-4">
+    <label>First Name</label>
+    {{ form.first_name }}
+    {{ form.first_name.errors }}
+  </div>
+
+  <div class="container mt-4">
+    <label>Last Name</label>
+    {{ form.last_name }}
+    {{ form.last_name.errors }}
+  </div>
+
+  <div class="container mt-4">
+    <label>Email</label>
+    {{ form.email }}
+    {{ form.email.errors }}
+  </div>
+
+  <div class="container mt-4">
+    <label>Password</label>
+    {{ form.password1 }}
+    {{ form.password1.errors }}
+  </div>
+
+  <div class="container mt-4">
+    <label>Confirm Password</label>
+    {{ form.password2 }}
+    {{ form.password2.errors }}
+  </div>
 
   <p><small><span style="color: red">*</span> Fields marked with * are required.</small></p>
 
