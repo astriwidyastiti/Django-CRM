@@ -37,10 +37,6 @@
             <td><strong>Created at </strong></td>
             <td>{{ customer_record.created_at }}</td>
         </tr>
-        <tr>
-            <td><strong>ID </strong></td>
-            <td>{{ customer_record.id }}</td>
-        </tr> 
         
          
     </table>
@@ -49,7 +45,6 @@
 <br/><br/>
 <a href="{% url 'home' %}" class="btn btn-outline-secondary">Back</a>
 
-<a href="{% url 'update_record' customer_record.id %}" class="btn btn-primary">Update</a>
 
 
 {% endblock %}
