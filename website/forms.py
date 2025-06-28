@@ -55,34 +55,85 @@ class SignUpForm(UserCreationForm):
         
 
 class AddRecordForm(forms.ModelForm):
-    first_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'First Name*', 'class':'form-control'}), label='First Name')
-    last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Last Name*', 'class':'form-control'}), label='Last Name')
-    email = forms.EmailField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Email*', 'class':'form-control'}), label='Email')
-    phone  = forms.CharField(required=True, validators=[RegexValidator(regex=r'^\d{10,13}$', message="Enter a valid phone number (10–13 digits).")], widget=forms.widgets.TextInput(attrs={'placeholder':'Phone*', 'class':'form-control','pattern': '\d{10,13}',
-            'inputmode': 'numeric'}), label='Phone')
-    address = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Address*', 'class':'form-control'}), label='Address')
-    country = forms.ChoiceField(
-    choices=[('', 'Select Country')],
-    required=True,
-    widget=forms.Select(attrs={'class': 'form-control', 'id': 'country-select'}),
-    label='Country'
+    first_name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'First Name*',
+            'class': 'form-control',
+            'required': 'required'
+        }),
+        label='First Name'
     )
-
+    last_name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Last Name*',
+            'class': 'form-control',
+            'required': 'required'
+        }),
+        label='Last Name'
+    )
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Email*',
+            'class': 'form-control',
+            'required': 'required'
+        }),
+        label='Email'
+    )
+    phone = forms.CharField(
+        required=True,
+        validators=[RegexValidator(regex=r'^\d{10,13}$', message="Enter a valid phone number (10–13 digits).")],
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Phone*',
+            'class': 'form-control',
+            'pattern': r'\d{10,13}',
+            'inputmode': 'numeric',
+            'required': 'required'
+        }),
+        label='Phone'
+    )
+    address = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Address*',
+            'class': 'form-control',
+            'required': 'required'
+        }),
+        label='Address'
+    )
+    country = forms.ChoiceField(
+        choices=[('Indonesia', 'Indonesia')],
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='Country'
+    )
     state = forms.ChoiceField(
         choices=[('', 'Select State')],
         required=True,
-        widget=forms.Select(attrs={'class': 'form-control', 'id': 'state-select'}),
+        widget=forms.Select(attrs={'class': 'form-control', 'name': 'state'}),
         label='State'
     )
-
     city = forms.ChoiceField(
         choices=[('', 'Select City')],
         required=True,
-        widget=forms.Select(attrs={'class': 'form-control', 'id': 'city-select'}),
+        widget=forms.Select(attrs={'class': 'form-control', 'name': 'city'}),
         label='City'
     )
-    zipcode = forms.CharField(required=True, validators=[RegexValidator(regex=r'^\d{5}$', message="Zipcode must be 5 digits.")], widget=forms.widgets.TextInput(attrs={'placeholder':'Zipcode*', 'class':'form-control', 'maxlength':'5', 'pattern' : '\d{5}', 'inputmode': 'numeric',}), label='Zipcode')
-  
+    zipcode = forms.CharField(
+        required=True,
+        validators=[RegexValidator(regex=r'^\d{5}$', message="Zipcode must be 5 digits.")],
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Zipcode*',
+            'class': 'form-control',
+            'maxlength': '5',
+            'pattern': r'\d{5}',
+            'inputmode': 'numeric',
+            'required': 'required'
+        }),
+        label='Zipcode'
+    )
     class Meta:
         model = Record
-        exclude =('user',)
+        exclude = ('user',)
