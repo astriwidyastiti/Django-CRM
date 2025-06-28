@@ -100,9 +100,9 @@
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('add-record-form');
   const registerBtn = document.getElementById('openModalBtn');
-  const countrySelect = document.getElementById("country-select");
-  const stateSelect = document.getElementById("state-select");
-  const citySelect = document.getElementById("city-select");
+  const countrySelect = document.querySelector('[name="country"]');
+  const stateSelect = document.querySelector('[name="state"]');
+  const citySelect = document.querySelector('[name="city"]');
 
   // Cegah submit langsung saat tekan Enter
   form.addEventListener('keydown', function (event) {
