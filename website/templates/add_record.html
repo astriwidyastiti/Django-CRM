@@ -4,119 +4,152 @@
 <div class="container content-wrapper py-4">
   <div class="row justify-content-center">
     <div class="col-md-6">
-    <h1 class="text-center" style="margin-top: 0;">Add Record</h1>
-  <br/>
 
-        <form method="POST" action="{% url 'add_record' %}">
-          {% csrf_token %}
-          <div class="mb-3">
-            <label class="form-label">First Name</label>
-            {{ form.first_name }}
-            {{ form.first_name.errors }}
-          </div>
+      <h1 class="text-center">Add Record</h1>
+      <br/>
 
-          <div class="mb-3">
-            <label class="form-label">Last Name</label>
-            {{ form.last_name }}
-            {{ form.last_name.errors }}
-          </div>
+      <form method="POST" action="{% url 'add_record' %}" id="add-record-form">
+        {% csrf_token %}
 
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            {{ form.email }}
-            {{ form.email.errors }}
-          </div>
+        <div class="mb-3">
+          <label class="form-label">First Name</label>
+          {{ form.first_name }}
+          {{ form.first_name.errors }}
+        </div>
 
-          <div class="mb-3">
-            <label class="form-label">Phone</label>
-            {{ form.phone }}
-            {{ form.phone.errors }}
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Last Name</label>
+          {{ form.last_name }}
+          {{ form.last_name.errors }}
+        </div>
 
-          <div class="mb-3">
-            <label class="form-label">Address</label>
-            {{ form.address }}
-            {{ form.address.errors }}
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          {{ form.email }}
+          {{ form.email.errors }}
+        </div>
 
-            <div class="mb-3">
-            <label class="form-label">Country</label>
-            {{ form.country }}
-            {{ form.country.errors }}
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Phone</label>
+          {{ form.phone }}
+          {{ form.phone.errors }}
+        </div>
 
-            <div class="mb-3">
-            <label class="form-label">State</label>
-            {{ form.state }}
-            {{ form.state.errors }}
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Address</label>
+          {{ form.address }}
+          {{ form.address.errors }}
+        </div>
 
-          <div class="mb-3">
-            <label class="form-label">City</label>
-            {{ form.city }}
-            {{ form.city.errors }}
-          </div>
+        <div class="mb-3">
+          <label class="form-label">Country</label>
+          {{ form.country }}
+          {{ form.country.errors }}
+        </div>
 
-          
-          <div class="mb-3">
-            <label class="form-label">Zip Code</label>
-            {{ form.zipcode }}
-            {{ form.zipcode.errors }}
-          </div>
-          
-          
-          <button type="submit" style="display: none;" disabled aria-hidden="true"></button>
+        <div class="mb-3">
+          <label class="form-label">State</label>
+          {{ form.state }}
+          {{ form.state.errors }}
+        </div>
 
-          <div class="text-end">
-            <a href="{% url "home" %}" class="btn btn-outline-secondary me-2">
-                Back
-            </a>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addRecordModal">
-              Add Record
-            </button>
-          </div>
+        <div class="mb-3">
+          <label class="form-label">City</label>
+          {{ form.city }}
+          {{ form.city.errors }}
+        </div>
 
-          <!-- Modal konfirmasi -->
-          <div class="modal fade" id="addRecordModal" tabindex="-1" aria-labelledby="addRecordModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
+        <div class="mb-3">
+          <label class="form-label">Zip Code</label>
+          {{ form.zipcode }}
+          {{ form.zipcode.errors }}
+        </div>
 
-                <div class="modal-header">
-                  <h5 class="modal-title" id="addRecordModalLabel">Add Data Confirmation</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+        <!-- Tombol submit tersembunyi agar Enter tidak langsung submit -->
+        <button type="submit" style="display: none;" disabled aria-hidden="true"></button>
 
-                <div class="modal-body">
-                  Are you sure you want to add the data?
-                </div>
+        <br/>
+        <p>
+          <small><span style="color: red">*</span> Fields marked with * are required.</small>
+        </p>
+        <br/>
 
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="submit" class="btn btn-danger">Add</button>
-                </div>
+        <div class="text-end">
+          <a href="{% url 'home' %}" class="btn btn-outline-secondary me-2">Back</a>
+          <button type="button" id="openModalBtn" class="btn btn-success" disabled>Add Record</button>
+        </div>
+        <br/>
+      </form>
 
-              </div>
+      <!-- Modal konfirmasi -->
+      <div class="modal fade" id="addRecordModal" tabindex="-1" aria-labelledby="addRecordModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h5 class="modal-title" id="addRecordModalLabel">Add Data Confirmation</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+
+            <div class="modal-body">
+              Are you sure you want to add the data?
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-danger">Add</button>
+            </div>
+
           </div>
-        </form>
         </div>
-        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
-        
-
 {% endblock content %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const form = document.querySelector('form');
 
-  form.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
-      const modalOpen = document.querySelector('.modal.show');
-      if (!modalOpen) {
-        event.preventDefault();
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Validasi dan Modal Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('add-record-form');
+    const registerBtn = document.getElementById('openModalBtn');
+
+    // Cegah submit saat tekan Enter kecuali di textarea
+    form.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+        const modalOpen = document.querySelector('.modal.show');
+        if (!modalOpen) {
+          event.preventDefault();
+        }
       }
+    });
+
+    // Cek apakah semua field required telah terisi
+    function checkForm() {
+      const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+      const allFilled = Array.from(requiredFields).every(field => field.value.trim() !== '');
+      registerBtn.disabled = !allFilled;
     }
+
+    checkForm(); // Cek saat awal load
+
+    // Cek ulang setiap kali field diisi
+    form.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+      field.addEventListener('input', checkForm);
+    });
+
+    // Saat klik tombol Add Record
+    registerBtn.addEventListener('click', function () {
+      if (form.checkValidity()) {
+        const myModal = new bootstrap.Modal(document.getElementById('addRecordModal'));
+        myModal.show();
+      } else {
+        form.reportValidity();
+      }
+    });
   });
-});
 </script>
