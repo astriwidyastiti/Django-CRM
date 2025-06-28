@@ -112,82 +112,96 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Validasi dan Modal Script -->
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('add-record-form');
-    const registerBtn = document.getElementById('openModalBtn');
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('add-record-form');
+  const registerBtn = document.getElementById('openModalBtn');
 
-    // Cegah submit saat tekan Enter kecuali di textarea
-    form.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
-        const modalOpen = document.querySelector('.modal.show');
-        if (!modalOpen) {
-          event.preventDefault();
-        }
+  // Prevent Enter from submitting unless textarea
+  form.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+      const modalOpen = document.querySelector('.modal.show');
+      if (!modalOpen) {
+        event.preventDefault();
       }
-    });
-
-    // Cek apakah semua field required telah terisi
-    function checkForm() {
-      const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
-      const allFilled = Array.from(requiredFields).every(field => field.value.trim() !== '');
-      registerBtn.disabled = !allFilled;
     }
-
-    checkForm(); // Cek saat awal load
-
-    // Cek ulang setiap kali field diisi
-    form.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
-      field.addEventListener('input', checkForm);
-    });
-
-    // Saat klik tombol Add Record
-    registerBtn.addEventListener('click', function () {
-      if (form.checkValidity()) {
-        const myModal = new bootstrap.Modal(document.getElementById('addRecordModal'));
-        myModal.show();
-      } else {
-        form.reportValidity();
-      }
-    });
   });
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+
+  // Check if required fields are filled
+  function checkForm() {
+    const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+    const allFilled = Array.from(requiredFields).every(field => field.value.trim() !== '');
+    registerBtn.disabled = !allFilled;
+  }
+
+  checkForm();
+
+  form.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
+    field.addEventListener('input', checkForm);
+  });
+
+  // When Add Record button clicked, show modal
+  registerBtn.addEventListener('click', function () {
+    if (form.checkValidity()) {
+      const myModal = new bootstrap.Modal(document.getElementById('addRecordModal'));
+      myModal.show();
+    } else {
+      form.reportValidity();
+    }
+  });
+
+  // --------------------------------------
+  // DROPDOWN DINAMIS COUNTRY > STATE > CITY
+  // --------------------------------------
   const countrySelect = document.getElementById("country-select");
   const stateSelect = document.getElementById("state-select");
   const citySelect = document.getElementById("city-select");
 
-  // 1. Isi dropdown country manual karena emsifa hanya untuk Indonesia
-  countrySelect.innerHTML = `<option value="Indonesia" selected>Indonesia</option>`;
+  if (!countrySelect || !stateSelect || !citySelect) return;
 
-  // 2. Load provinsi dari API
+  // Isi Country
+  const countryOption = document.createElement("option");
+  countryOption.value = "Indonesia";
+  countryOption.text = "Indonesia";
+  countryOption.selected = true;
+  countrySelect.appendChild(countryOption);
+
+  // Load Province
   fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
-    .then(res => res.json())
-    .then(provinces => {
-      stateSelect.innerHTML = `<option value="">Select State</option>`;
-      provinces.forEach(province => {
-        let option = document.createElement("option");
-        option.value = province.id;
-        option.text = province.name;
-        stateSelect.add(option);
+    .then(response => response.json())
+    .then(data => {
+      stateSelect.innerHTML = '<option value="">Select State</option>';
+      data.forEach(province => {
+        const option = document.createElement("option");
+        option.value = province.name;
+        option.textContent = province.name;
+        option.dataset.provinceId = province.id;
+        stateSelect.appendChild(option);
       });
     });
 
-  // 3. Ketika provinsi dipilih, ambil kota/kabupaten
+  // Load City when Province selected
   stateSelect.addEventListener("change", function () {
-    const provinceId = this.value;
+    const selectedOption = stateSelect.options[stateSelect.selectedIndex];
+    const provinceId = selectedOption.dataset.provinceId;
+
+    if (!provinceId) {
+      citySelect.innerHTML = '<option value="">Select City</option>';
+      return;
+    }
 
     fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`)
-      .then(res => res.json())
-      .then(cities => {
-        citySelect.innerHTML = `<option value="">Select City</option>`;
-        cities.forEach(city => {
-          let option = document.createElement("option");
+      .then(response => response.json())
+      .then(data => {
+        citySelect.innerHTML = '<option value="">Select City</option>';
+        data.forEach(city => {
+          const option = document.createElement("option");
           option.value = city.name;
-          option.text = city.name;
-          citySelect.add(option);
+          option.textContent = city.name;
+          citySelect.appendChild(option);
         });
       });
   });
