@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(data => {
       stateSelect.innerHTML = '<option value="">Select State</option>';
       data.forEach(province => {
+        console.log("PROVINCE DATA:", data);
         const opt = document.createElement('option');
         opt.value = province.name;
         opt.textContent = province.name;
