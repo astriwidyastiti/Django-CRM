@@ -61,10 +61,26 @@ class AddRecordForm(forms.ModelForm):
     phone  = forms.CharField(required=True, validators=[RegexValidator(regex=r'^\d{10,13}$', message="Enter a valid phone number (10–13 digits).")], widget=forms.widgets.TextInput(attrs={'placeholder':'Phone*', 'class':'form-control','pattern': '\d{10,13}',
             'inputmode': 'numeric'}), label='Phone')
     address = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Address*', 'class':'form-control'}), label='Address')
-    country = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Country*', 'class':'form-control'}), label='Country')
-    state = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'State*', 'class':'form-control'}), label='State')
-    city = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'City*', 'class':'form-control'}), label='City')
-    
+    country = forms.ChoiceField(
+    choices=[('', 'Select Country')],
+    required=True,
+    widget=forms.Select(attrs={'class': 'form-control', 'id': 'country-select'}),
+    label='Country'
+    )
+
+    state = forms.ChoiceField(
+        choices=[('', 'Select State')],
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-control', 'id': 'state-select'}),
+        label='State'
+    )
+
+    city = forms.ChoiceField(
+        choices=[('', 'Select City')],
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-control', 'id': 'city-select'}),
+        label='City'
+    )
     zipcode = forms.CharField(required=True, validators=[RegexValidator(regex=r'^\d{5}$', message="Zipcode must be 5 digits.")], widget=forms.widgets.TextInput(attrs={'placeholder':'Zipcode*', 'class':'form-control', 'maxlength':'5', 'pattern' : '\d{5}', 'inputmode': 'numeric',}), label='Zipcode')
   
     class Meta:
