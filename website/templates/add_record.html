@@ -153,3 +153,44 @@
     });
   });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const countrySelect = document.getElementById("country-select");
+  const stateSelect = document.getElementById("state-select");
+  const citySelect = document.getElementById("city-select");
+
+  // 1. Isi dropdown country manual karena emsifa hanya untuk Indonesia
+  countrySelect.innerHTML = `<option value="Indonesia" selected>Indonesia</option>`;
+
+  // 2. Load provinsi dari API
+  fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
+    .then(res => res.json())
+    .then(provinces => {
+      stateSelect.innerHTML = `<option value="">Select State</option>`;
+      provinces.forEach(province => {
+        let option = document.createElement("option");
+        option.value = province.id;
+        option.text = province.name;
+        stateSelect.add(option);
+      });
+    });
+
+  // 3. Ketika provinsi dipilih, ambil kota/kabupaten
+  stateSelect.addEventListener("change", function () {
+    const provinceId = this.value;
+
+    fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`)
+      .then(res => res.json())
+      .then(cities => {
+        citySelect.innerHTML = `<option value="">Select City</option>`;
+        cities.forEach(city => {
+          let option = document.createElement("option");
+          option.value = city.name;
+          option.text = city.name;
+          citySelect.add(option);
+        });
+      });
+  });
+});
+</script>
+
