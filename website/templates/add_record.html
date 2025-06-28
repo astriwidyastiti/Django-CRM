@@ -4,77 +4,36 @@
 <div class="container content-wrapper py-4">
   <div class="row justify-content-center">
     <div class="col-md-6">
-
       <h1 class="text-center">Add Record</h1>
       <br/>
 
       <form method="POST" action="{% url 'add_record' %}" id="add-record-form">
         {% csrf_token %}
 
-        <div class="mb-3">
-          <label class="form-label">First Name</label>
-          {{ form.first_name }} {{ form.first_name.errors }}
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Last Name</label>
-          {{ form.last_name }} {{ form.last_name.errors }}
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Email</label>
-          {{ form.email }} {{ form.email.errors }}
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Phone</label>
-          {{ form.phone }} {{ form.phone.errors }}
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Address</label>
-          {{ form.address }} {{ form.address.errors }}
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Country</label>
-          {{ form.country }} {{ form.country.errors }}
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">State</label>
-          {{ form.state }} {{ form.state.errors }}
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">City</label>
-          {{ form.city }} {{ form.city.errors }}
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Zip Code</label>
-          {{ form.zipcode }} {{ form.zipcode.errors }}
-        </div>
+        {% for field in form %}
+          <div class="mb-3">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+          </div>
+        {% endfor %}
 
         <button type="submit" style="display: none;" disabled aria-hidden="true"></button>
 
-        <br/>
         <p><small><span style="color: red">*</span> Fields marked with * are required.</small></p>
-        <br/>
 
         <div class="text-end">
           <a href="{% url 'home' %}" class="btn btn-outline-secondary me-2">Back</a>
           <button type="button" id="openModalBtn" class="btn btn-success" disabled>Add Record</button>
         </div>
-        <br/>
       </form>
 
-      <!-- Modal konfirmasi -->
+      <!-- Modal -->
       <div class="modal fade" id="addRecordModal" tabindex="-1" aria-labelledby="addRecordModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="addRecordModalLabel">Add Data Confirmation</h5>
+              <h5 class="modal-title">Add Data Confirmation</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -93,28 +52,26 @@
 </div>
 {% endblock content %}
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('add-record-form');
   const registerBtn = document.getElementById('openModalBtn');
-  const countrySelect = document.querySelector('[name="country"]');
   const stateSelect = document.querySelector('[name="state"]');
   const citySelect = document.querySelector('[name="city"]');
 
-  // Cegah submit langsung saat tekan Enter
-  form.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+  // Disable submit on Enter
+  form.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
       const modalOpen = document.querySelector('.modal.show');
       if (!modalOpen) {
-        event.preventDefault();
+        e.preventDefault();
       }
     }
   });
 
-  // Validasi field
+  // Enable "Add Record" if all fields filled
   function checkForm() {
     const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
     const allFilled = Array.from(requiredFields).every(field => field.value.trim() !== '');
@@ -122,13 +79,12 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   checkForm();
-
   form.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
     field.addEventListener('input', checkForm);
     field.addEventListener('change', checkForm);
   });
 
-  // Klik tombol Add Record
+  // Show modal
   registerBtn.addEventListener('click', function () {
     if (form.checkValidity()) {
       const myModal = new bootstrap.Modal(document.getElementById('addRecordModal'));
@@ -138,48 +94,40 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Isi country (Indonesia)
-  if (countrySelect) {
-    countrySelect.innerHTML = `<option value="Indonesia" selected>Indonesia</option>`;
-  }
+  // Load provinces
+  fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
+    .then(res => res.json())
+    .then(data => {
+      stateSelect.innerHTML = '<option value="">Select State</option>';
+      data.forEach(province => {
+        const opt = document.createElement('option');
+        opt.value = province.name;
+        opt.textContent = province.name;
+        opt.dataset.provinceId = province.id;
+        stateSelect.appendChild(opt);
+      });
+    });
 
-  // Load provinsi
-  if (stateSelect && citySelect) {
-    fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
+  // Load cities
+  stateSelect.addEventListener('change', function () {
+    const selected = stateSelect.options[stateSelect.selectedIndex];
+    const provinceId = selected.dataset.provinceId;
+    if (!provinceId) {
+      citySelect.innerHTML = '<option value="">Select City</option>';
+      return;
+    }
+
+    fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`)
       .then(res => res.json())
-      .then(provinces => {
-        stateSelect.innerHTML = '<option value="">Select State</option>';
-        provinces.forEach(province => {
-          const option = document.createElement("option");
-          option.value = province.name;
-          option.textContent = province.name;
-          option.dataset.provinceId = province.id;
-          stateSelect.appendChild(option);
+      .then(data => {
+        citySelect.innerHTML = '<option value="">Select City</option>';
+        data.forEach(city => {
+          const opt = document.createElement('option');
+          opt.value = city.name;
+          opt.textContent = city.name;
+          citySelect.appendChild(opt);
         });
       });
-
-    // Ketika provinsi dipilih
-    stateSelect.addEventListener("change", function () {
-      const selectedOption = stateSelect.options[stateSelect.selectedIndex];
-      const provinceId = selectedOption.dataset.provinceId;
-
-      if (!provinceId) {
-        citySelect.innerHTML = '<option value="">Select City</option>';
-        return;
-      }
-
-      fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`)
-        .then(res => res.json())
-        .then(cities => {
-          citySelect.innerHTML = '<option value="">Select City</option>';
-          cities.forEach(city => {
-            const option = document.createElement("option");
-            option.value = city.name;
-            option.textContent = city.name;
-            citySelect.appendChild(option);
-          });
-        });
-    });
-  }
+  });
 });
 </script>
