@@ -55,17 +55,17 @@ class SignUpForm(UserCreationForm):
         
 
 class AddRecordForm(forms.ModelForm):
-    first_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'First Name', 'class':'form-control'}), label='First Name')
-    last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Last Name', 'class':'form-control'}), label='Last Name')
-    email = forms.EmailField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Email', 'class':'form-control'}), label='Email')
-    phone  = forms.CharField(required=True, validators=[RegexValidator(regex=r'^\d{10,13}$', message="Enter a valid phone number (10–13 digits).")], widget=forms.widgets.TextInput(attrs={'placeholder':'Phone', 'class':'form-control','pattern': '\d{10,13}',
+    first_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'First Name*', 'class':'form-control'}), label='First Name')
+    last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Last Name*', 'class':'form-control'}), label='Last Name')
+    email = forms.EmailField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Email*', 'class':'form-control'}), label='Email')
+    phone  = forms.CharField(required=True, validators=[RegexValidator(regex=r'^\d{10,13}$', message="Enter a valid phone number (10–13 digits).")], widget=forms.widgets.TextInput(attrs={'placeholder':'Phone*', 'class':'form-control','pattern': '\d{10,13}',
             'inputmode': 'numeric'}), label='Phone')
-    address = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Address', 'class':'form-control'}), label='Address')
-    country = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Country', 'class':'form-control'}), label='Country')
-    state = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'State', 'class':'form-control'}), label='State')
-    city = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'City', 'class':'form-control'}), label='City')
+    address = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Address*', 'class':'form-control'}), label='Address')
+    country = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'Country*', 'class':'form-control'}), label='Country')
+    state = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'State*', 'class':'form-control'}), label='State')
+    city = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder':'City*', 'class':'form-control'}), label='City')
     
-    zipcode = forms.CharField(required=True, validators=[RegexValidator(regex=r'^\d{5}$', message="Zipcode must be 5 digits.")], widget=forms.widgets.TextInput(attrs={'placeholder':'Zipcode', 'class':'form-control', 'maxlength':'5', 'pattern' : '\d{5}', 'inputmode': 'numeric',}), label='Zipcode')
+    zipcode = forms.CharField(required=True, validators=[RegexValidator(regex=r'^\d{5}$', message="Zipcode must be 5 digits.")], widget=forms.widgets.TextInput(attrs={'placeholder':'Zipcode*', 'class':'form-control', 'maxlength':'5', 'pattern' : '\d{5}', 'inputmode': 'numeric',}), label='Zipcode')
   
     class Meta:
         model = Record
