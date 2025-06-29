@@ -110,15 +110,21 @@ class AddRecordForm(forms.ModelForm):
         label='Country'
     )
     state = forms.ChoiceField(
-        choices=[('', 'Select State')],
+        choices=[],  
         required=True,
-        widget=forms.Select(attrs={'class': 'form-control', 'name': 'state'}),
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'id': 'state'  
+        }),
         label='State'
     )
     city = forms.ChoiceField(
-        choices=[('', 'Select City')],
+        choices=[],  
         required=True,
-        widget=forms.Select(attrs={'class': 'form-control', 'name': 'city'}),
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'id': 'city'  
+        }),
         label='City'
     )
     zipcode = forms.CharField(
