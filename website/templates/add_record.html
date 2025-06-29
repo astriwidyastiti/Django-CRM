@@ -58,8 +58,9 @@
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('add-record-form');
   const registerBtn = document.getElementById('openModalBtn');
-  const stateSelect = document.querySelector('[name="state"]');
-  const citySelect = document.querySelector('[name="city"]');
+  const stateSelect = document.getElementById("state");
+  const citySelect = document.getElementById("city");
+
 
   // Disable submit on Enter
   form.addEventListener('keydown', function (e) {
