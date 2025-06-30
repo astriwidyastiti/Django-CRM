@@ -80,7 +80,7 @@ def add_record(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             if form.is_valid():
-                add_record = form.save()
+                form = form.save()
                 messages.success(request, "Data added successfully...")
                 return redirect('home')  
         return render(request, 'add_record.html', {'form':form})
