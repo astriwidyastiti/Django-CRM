@@ -60,6 +60,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const stateSelect = document.getElementById('state');
   const citySelect = document.getElementById('city');
 
+  // Awal city disabled karena state belum dipilih
+  citySelect.disabled = true;
+
   function checkForm() {
     const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
     const allFilled = Array.from(requiredFields).every(field => field.value.trim() !== '');
@@ -80,8 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Load provinces
-  console.log("🚀 Start fetching provinces...");
-
   fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
     .then(res => {
       if (!res.ok) {
@@ -90,8 +91,6 @@ document.addEventListener('DOMContentLoaded', function () {
       return res.json();
     })
     .then(data => {
-      console.log("✅ Data provinsi berhasil diambil:", data);
-
       stateSelect.innerHTML = '<option value="">Select State</option>';
       data.forEach(province => {
         const opt = document.createElement('option');
@@ -109,10 +108,15 @@ document.addEventListener('DOMContentLoaded', function () {
   stateSelect.addEventListener('change', function () {
     const selected = stateSelect.options[stateSelect.selectedIndex];
     const provinceId = selected.dataset.provinceId;
+
     if (!provinceId) {
       citySelect.innerHTML = '<option value="">Select City</option>';
+      citySelect.disabled = true; // disable jika state belum dipilih
+      checkForm();
       return;
     }
+
+    citySelect.disabled = false; // enable city select saat ada pilihan state
 
     fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`)
       .then(res => res.json())
@@ -124,8 +128,15 @@ document.addEventListener('DOMContentLoaded', function () {
           opt.textContent = city.name;
           citySelect.appendChild(opt);
         });
+        checkForm();
+      })
+      .catch(error => {
+        console.error("❌ Gagal mengambil data kota:", error);
+        citySelect.disabled = true; // disable jika gagal load kota
+        checkForm();
       });
   });
 });
 </script>
+
 {% endblock %}
