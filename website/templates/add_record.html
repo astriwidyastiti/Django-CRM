@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const citySelect = document.getElementById('city');
 
   // Awal city disabled karena state belum dipilih
+  citySelect.innerHTML = '<option value="">Select City</option>';
   citySelect.disabled = true;
 
   function checkForm() {
