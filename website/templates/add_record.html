@@ -80,9 +80,18 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Load provinces
+  console.log("🚀 Start fetching provinces...");
+
   fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("HTTP status " + res.status);
+      }
+      return res.json();
+    })
     .then(data => {
+      console.log("✅ Data provinsi berhasil diambil:", data);
+
       stateSelect.innerHTML = '<option value="">Select State</option>';
       data.forEach(province => {
         const opt = document.createElement('option');
@@ -91,6 +100,9 @@ document.addEventListener('DOMContentLoaded', function () {
         opt.dataset.provinceId = province.id;
         stateSelect.appendChild(opt);
       });
+    })
+    .catch(error => {
+      console.error("❌ Gagal mengambil data provinsi:", error);
     });
 
   // Load cities when a province is selected
