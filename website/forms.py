@@ -110,7 +110,7 @@ class AddRecordForm(forms.ModelForm):
         label='Country'
     )
     state = forms.CharField(
-        choices=[],  
+          
         required=True,
         widget=forms.Select(attrs={
             'class': 'form-control',
@@ -119,7 +119,7 @@ class AddRecordForm(forms.ModelForm):
         label='State'
     )
     city = forms.CharField(
-        choices=[],  
+         
         required=True,
         widget=forms.Select(attrs={
             'class': 'form-control',
