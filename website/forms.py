@@ -103,7 +103,7 @@ class AddRecordForm(forms.ModelForm):
         }),
         label='Address'
     )
-    country = forms.CharField(
+    country = forms.ChoiceField(
         choices=[('Indonesia', 'Indonesia')],
         required=True,
         widget=forms.Select(attrs={'class': 'form-control'}),
